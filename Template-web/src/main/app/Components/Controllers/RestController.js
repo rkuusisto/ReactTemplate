@@ -18,7 +18,10 @@ class RestController extends React.Component {
         this.contentType = 'application/json;charset=UTF-8';
     }
 
-
+    /**
+     * Submit data to Rest API
+     * @param {} payload 
+     */
     submitData(payload) {
     
         let url = '';
