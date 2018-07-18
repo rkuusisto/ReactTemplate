@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>fi.elinar.react</groupId>
+  <artifactId>Template</artifactId>
+  <version>1.0-SNAPSHOT</version>
+  <packaging>pom</packaging>
+  <name>Template</name>
+  
+  <!-- Setting Context Roots -->
+<properties>
+       <ui.contextRoot>/templateUI</ui.contextRoot>
+       <rest.contextRoot>/templateRest</rest.contextRoot>
+ </properties>
+  
+  <!-- Build Profiles --> 
+  <profiles>
+      <profile>
+        <id>development_without_libs</id>
+        <activation>
+            <activeByDefault>true</activeByDefault>
+        </activation>
+        <properties>
+            <build.profile.id>development</build.profile.id>
+            <main.lib.scope>provided</main.lib.scope>
+        </properties>
+      </profile>
+      <profile>
+        <id>development_with_libs</id>
+        <activation>
+            <activeByDefault>true</activeByDefault>
+        </activation>
+        <properties>
+            <build.profile.id>development</build.profile.id>
+            <main.lib.scope>compile</main.lib.scope>
+        </properties>
+      </profile>      
+  </profiles>
+  
+   
+   
+  <modules>
+    <module>Template-ear</module>
+    <module>Template-web</module>
+    <module>Template-rest</module>
+  </modules>
+</project>

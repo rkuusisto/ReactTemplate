@@ -1,0 +1,83 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.2.xsd 
+        http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.2.xsd">
+
+    <!--
+        Import Connector Stuff
+    -->
+
+    <context:component-scan base-package="fi.elinar.react.rest.controller"/>
+    <mvc:annotation-driven/>
+  
+    
+    <context:property-placeholder location="classpath*:/config.properties" order="1" ignore-unresolvable="true" />
+    <context:property-placeholder location="classpath*:/sharedconfig.properties" order="2" ignore-unresolvable="true" />
+    
+    
+    <bean id="multipartResolver"
+          class="org.springframework.web.multipart.commons.CommonsMultipartResolver" >
+            <property name="maxUploadSize" value="500000000"/>
+            <property name="resolveLazily" value="true" />
+    </bean>
+    
+    <!--
+        View Resolver
+    -->
+    <bean name="viewResolver" class="org.springframework.web.servlet.view.BeanNameViewResolver"/>
+
+    <!--
+        Templating JSP-pages
+    -->
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="prefix" value="/WEB-INF/jsp/"/>
+        <property name="suffix" value=".jsp"/>
+    </bean>
+
+
+    <bean name="jsonTemplate" class="org.springframework.web.servlet.view.json.MappingJackson2JsonView">
+        <property name="objectMapper">
+            <bean class="org.springframework.http.converter.json.Jackson2ObjectMapperFactoryBean">
+                <property name="autoDetectFields" value="false"/>
+                <property name="autoDetectGettersSetters" value="false"/>
+            </bean>
+        </property>
+    </bean>
+
+    <!--
+        Message Holder
+    -->
+    <bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource"
+          scope="singleton">
+        <property name="basenames">
+            <list>
+                <value>classpath:/messages/messages</value>
+            </list>
+        </property>
+
+        <property name="defaultEncoding" value="UTF-8"/>
+        <property name="fallbackToSystemLocale" value="false"/>
+
+    </bean>
+
+  
+    <mvc:interceptors>
+        <bean class="fi.elinar.react.rest.interceptor.DisableBrowserCachingInterceptor" >
+            <property name="cors" value="${cors.enabled}" />
+        </bean>
+    </mvc:interceptors>
+    
+    <mvc:resources mapping="/resources/**" location="/resources/"/>
+
+                 
+    <!-- 
+            Default Language for messages
+    -->
+    <bean id="locale" class="java.util.Locale" autowire-candidate="true" >
+        <constructor-arg index="0" value="${system.default.language}" />
+        <constructor-arg index="1" value="${system.default.country}" />
+    </bean>              
+    
+</beans>
