@@ -9,7 +9,7 @@ This is React Template with Spring
   
   Instructions for develoment
   
-  1) Run Template Rest on application server you wish
+  1) Run Template Rest on an application server of your choice
   2) Modify webpack.config.js with Rest URL
   3) Run npm start
    
