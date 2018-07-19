@@ -3,12 +3,11 @@ import ReactDOM from 'react-dom';
 import {  Button, Modal, ModalHeader, ModalBody, ModalFooter, Label, Input, Form,FormGroup, Col  } from 'reactstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import RestController from '../Controllers/RestController';
-
+import PropTypes from 'prop-types';
 
 class ExampleDialog extends Component {
 
-
-        constructor(props) {
+     constructor(props) {
         super(props);
         this.state = {
                 modal: true,
@@ -18,7 +17,6 @@ class ExampleDialog extends Component {
         this.closeMe = this.closeMe.bind(this);
         this.submitData = this.submitData.bind(this);
         this.handleChange = this.handleChange.bind(this);
-
     }
 
     /**
@@ -26,14 +24,18 @@ class ExampleDialog extends Component {
      * @param {Form data} event 
      */
     submitData(event) {
-        let rest = new RestController();
-        rest.submitData({firstName:this.state.firstname, lastName: this.state.lastname}).then(function(res) {
-                this.handleResults(res);
-        }.bind(this)).catch(function(error) {
-                console.log(error);
-                this.handleError(error.reason);
-        }.bind(this));;
-    
+        if(this.state.firstname === '' || this.state.lastname === '') {
+                alert("Fields first name & last name are required");
+        }else {
+
+                let rest = new RestController();
+                rest.submitData({firstName:this.state.firstname, lastName: this.state.lastname}).then(function(res) {
+                        this.handleResults(res);
+                }.bind(this)).catch(function(error) {
+                        console.log(error);
+                        this.handleError(error.reason);
+                }.bind(this));
+        }
     }
     /**
      * Handle error
@@ -46,7 +48,7 @@ class ExampleDialog extends Component {
                         modal: false
                         }
                 );
-                this.props.successCallBack(results.payload.message);
+                this.props.failtureCallBack(results.payload.message);
         }
     }
 
@@ -71,7 +73,7 @@ class ExampleDialog extends Component {
      * @param {} event 
      */
     closeMe(event) {
-                console.log("Closing dialog");
+               
                 this.setState( 
                         {
                         modal: false
@@ -84,7 +86,7 @@ class ExampleDialog extends Component {
      */
     handleChange(event) {
         this.setState({
-          [event.target.id]: event.target.value
+          [event.target.placeholder]: event.target.value
         });
     }
     /**
@@ -106,9 +108,9 @@ class ExampleDialog extends Component {
                                                 </Col>
                                         </FormGroup>
                                         <FormGroup row>
-                                                <Label for="password">Last name:</Label>
+                                                <Label for="lastname">Last name:</Label>
                                                 <Col sm={9}>
-                                                        <Input type="lastname" name="lastname" id="lastname" placeholder="lastname" onChange={this.handleChange}  />
+                                                        <Input name="lastname" id="lastname" placeholder="lastname" onChange={this.handleChange}  />
                                                 </Col>
                                         </FormGroup>                  
                                 </Form>                                
@@ -123,5 +125,13 @@ class ExampleDialog extends Component {
 
     }
 }
+
+ExampleDialog.propTypes = {
+        firstname: PropTypes.string,
+        lastname: PropTypes.string,
+        successCallBack : PropTypes.func,
+        failtureCallBack: PropTypes.func
+};
+
 
 export default ExampleDialog;
